@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
+import LockIcon from '@material-ui/icons/Lock';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +11,7 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from "axios";
 import {Redirect} from "react-router-dom";
+import {Avatar,} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: '0px 0px 8px 0px rgba(34, 60, 80, 0.2)',
     },
     typography: {
-        marginTop: "20px"
+        marginTop: "10px"
     },
     paper: {
         marginTop: theme.spacing(8),
@@ -36,33 +38,42 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        marginBottom: "40px"
+        marginBottom: "20px"
     },
+    icon: {
+        marginTop: "20px",
+        backgroundColor: "green"
+    },
+    wrongCred: {
+        display: "block",
+        color: "red"
+    }
 }));
 
 const schema = yup.object().shape({
     username: yup
         .string()
-        .required("Поле username обязательно для заполнения"),
+        .required("Поле Логин обязательно для заполнения"),
     password: yup
         .string()
-        .required("Поле password обязательно для заполнения")
-        .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$/,
-            "Пароль должен состоять из цифр и латинских букв верхнего и нижнего регистра"),
+        .required("Поле Пароль обязательно для заполнения")
 })
 
 export const SignIn = () => {
     const classes = useStyles();
     const {register, handleSubmit, errors} = useForm({
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schema),
+        mode: "onBlur"
     })
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [redirect, setRedirect] = useState(false)
-    const baseUrl = 'http://emphasoft-test-assignment.herokuapp.com'
+    const [wrong, setWrong] = useState(false)
+    const baseUrl = 'https://emphasoft-test-assignment.herokuapp.com'
 
     const onChangeUsername = (e) => {
         setUsername(e.target.value)
+        console.log(username)
     }
 
     const onChangePassword = (e) => {
@@ -72,14 +83,17 @@ export const SignIn = () => {
     const onSubmit = (data, e) => {
         e.preventDefault()
         axios
-            .post(baseUrl + '/api-token-auth/', {username: username, password: password})
+            .post(baseUrl + '/api-token-auth/', {username, password})
             .then((res) => {
                 localStorage.setItem('token', res.data.token)
+
                 if (res.request.status === 200) {
                     setRedirect(true)
                 }
-            console.log(res)
-                console.log(res.data.token)
+            })
+            .catch((err) => {
+                console.log(err.message)
+                setWrong(true)
         })
     }
 
@@ -87,12 +101,20 @@ export const SignIn = () => {
         return <Redirect to='/users' />
     }
 
+    if (localStorage.getItem('token')) {
+        return <Redirect to='/users' />
+    }
+
+
     return (
         <Container className={classes.container} component="main" maxWidth="xs">
             <CssBaseline/>
             <div className={classes.paper}>
+                <Avatar className={classes.icon}>
+                    <LockIcon />
+                </Avatar>
                 <Typography className={classes.typography} component="h1" variant="h5">
-                    Sign in
+                    Войти в IT
                 </Typography>
                 <form className={classes.form} noValidate
                       onSubmit={handleSubmit(onSubmit)}>
@@ -103,15 +125,14 @@ export const SignIn = () => {
                         fullWidth
                         inputRef={register}
                         id="username"
-                        label="Username"
+                        label="Логин"
                         name="username"
-                        autoComplete="email"
                         autoFocus
                         onChange={onChangeUsername}
                         value={username}
                         error={!!errors.username}
                         helperText={errors?.username?.message}
-
+                        autoComplete="username"
                     />
                     <TextField
                         variant="outlined"
@@ -120,7 +141,7 @@ export const SignIn = () => {
                         fullWidth
                         inputRef={register}
                         name="password"
-                        label="Password"
+                        label="Пароль"
                         type="password"
                         id="password"
                         autoComplete="current-password"
@@ -129,17 +150,17 @@ export const SignIn = () => {
                         error={!!errors.password}
                         helperText={errors?.password?.message}
                     />
-
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                    >
-                        Sign In
+                    >Вход
                     </Button>
                 </form>
+                {wrong === true &&
+                <p className={classes.wrongCred}>Неверный логин или пароль</p>}
             </div>
         </Container>
     );
