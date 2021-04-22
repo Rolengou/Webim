@@ -4,14 +4,12 @@ import {
     Table, TableContainer, TableHead,
     TableCell, TableSortLabel, TableBody,
     TableRow, Button, AppBar, DialogActions,
-    IconButton, makeStyles, Toolbar, TextField, Paper, InputBase,
+    IconButton, makeStyles, Toolbar, TextField,
+    Paper, InputBase, DialogTitle, Dialog, DialogContent,
 } from '@material-ui/core';
 import {Edit, Delete} from '@material-ui/icons';
 import Typography from "@material-ui/core/Typography";
 import swal from "sweetalert";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
@@ -25,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         minWidth: "600px",
         maxWidth: "1000px",
         margin: "0 auto",
-        height: "800px",
+        height: "1000px",
         boxShadow: "0px 0px 8px 0px rgba(34, 60, 80, 0.2)",
     },
     form: {
@@ -291,12 +289,12 @@ export const DataTable = () => {
                         Awesome Table!
                     </Typography>
                     <Paper component="form" className={styles.root}>
-                    <InputBase
-                        className={styles.input}
-                        placeholder="Type username"
-                        inputProps={{ 'aria-label': 'search here' }}
-                        onChange={handleChangeSearch}
-                    />
+                        <InputBase
+                            className={styles.input}
+                            placeholder="Type username"
+                            inputProps={{'aria-label': 'search here'}}
+                            onChange={handleChangeSearch}
+                        />
                     </Paper>
                     <Button color="inherit" onClick={handleClickOpen}>
                         + Add user
