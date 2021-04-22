@@ -4,7 +4,7 @@ import {
     Table, TableContainer, TableHead,
     TableCell, TableSortLabel, TableBody,
     TableRow, Button, AppBar, DialogActions,
-    IconButton, makeStyles, Toolbar, TextField, DialogContentText, Paper, InputBase, Divider
+    IconButton, makeStyles, Toolbar, TextField, Paper, InputBase,
 } from '@material-ui/core';
 import {Edit, Delete} from '@material-ui/icons';
 import Typography from "@material-ui/core/Typography";
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: "0px 0px 8px 0px rgba(34, 60, 80, 0.2)",
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
@@ -125,7 +125,6 @@ export const DataTable = () => {
             .get(baseUrl + '/api/v1/users/', config)
             .then((res) => {
                 setData(res.data)
-                //console.log(data)
             })
     }, [])
 
@@ -148,7 +147,6 @@ export const DataTable = () => {
     }
     const handleChangeSearch = (e) => {
         setSearchTerm(e.target.value)
-        console.log(searchTerm)
     }
 
     //Start sorting stuff
@@ -239,7 +237,6 @@ export const DataTable = () => {
             .then(() => {
                 setOpenEdit(false)
             })
-
             .catch((err) => {
                 console.log(err.message)
             })
@@ -270,6 +267,9 @@ export const DataTable = () => {
                 })
                 setFieldData('')
                 updateData()
+            })
+            .catch((err) => {
+                console.log(err.message)
             })
     }
     //End delete popup
@@ -343,7 +343,6 @@ export const DataTable = () => {
                                     Is active{fieldData === "is_active" ? <Arrow/> : null}
                                 </TableSortLabel>
                             </TableCell>
-                            {/*<TableCell>Last login</TableCell>*/}
                             <TableCell onClick={() => {
                                 fieldSortData('is_superuser')
                             }}>
@@ -373,7 +372,6 @@ export const DataTable = () => {
                                     <TableCell>{item.first_name}</TableCell>
                                     <TableCell>{item.last_name}</TableCell>
                                     <TableCell>{item.is_active + ''}</TableCell>
-                                    {/*<TableCell>{item.last_login}</TableCell>*/}
                                     <TableCell>{item.is_superuser + ''}</TableCell>
                                     <TableCell>
                                         <Button
@@ -408,10 +406,8 @@ export const DataTable = () => {
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    // autoComplete="firstname"
                                     name="firstname"
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     id="firstname"
                                     label="First Name"
@@ -424,12 +420,10 @@ export const DataTable = () => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     id="lastname"
                                     label="Last Name"
                                     name="lastname"
-                                    // autoComplete="lastname"
                                     inputRef={register}
                                     error={!!errors.lastname}
                                     helperText={errors?.lastname?.message}>
@@ -438,12 +432,10 @@ export const DataTable = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     id="username"
                                     label="Username"
                                     name="username"
-                                    // autoComplete="username"
                                     inputRef={register}
                                     error={!!errors.username}
                                     helperText={errors?.username?.message}
@@ -452,7 +444,6 @@ export const DataTable = () => {
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     name="password"
                                     label="Password"
@@ -496,11 +487,9 @@ export const DataTable = () => {
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
-                                    // autoComplete="firstname"
                                     defaultValue={selectedRowData.first_name}
                                     name="firstname"
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     id="firstname"
                                     label="First Name"
@@ -508,50 +497,38 @@ export const DataTable = () => {
                                     inputRef={register2}
                                     error={!!errors2.firstname}
                                     helperText={errors2?.firstname?.message}
-                                    // onChange={onChangeFirstnameEdit}
-                                    // value={firstname}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     defaultValue={selectedRowData.last_name}
                                     id="lastname"
                                     label="Last Name"
                                     name="lastname"
-                                    // autoComplete="lastname"
                                     inputRef={register2}
                                     error={!!errors2.lastname}
                                     helperText={errors2?.lastname?.message}
-                                    // onChange={onChangeLastnameEdit}
-                                    // value={lastname}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
                                     defaultValue={selectedRowData.username}
                                     id="username"
                                     label="Username"
                                     name="username"
-                                    // autoComplete="username"
                                     inputRef={register2}
-                                    //value={username}
                                     error={!!errors2.username}
                                     helperText={errors2?.username?.message}
-                                    //onChange={onChangeUsernameEdit}
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
-                                    //required
                                     fullWidth
-                                    //defaultValue={password}
                                     name="password"
                                     label="Password"
                                     type="password"
@@ -560,8 +537,6 @@ export const DataTable = () => {
                                     inputRef={register2}
                                     error={!!errors2.password}
                                     helperText={errors2?.password?.message}
-                                    // onChange={onChangePasswordEdit}
-                                    // value={password}
                                 />
                             </Grid>
                         </Grid>
@@ -590,18 +565,11 @@ export const DataTable = () => {
             {/*Delete popup*/}
             <Dialog
                 open={openDelete}
-                //TransitionComponent={Transition}
                 keepMounted
-                //onClose={handleCloseDelete}
                 aria-labelledby="alert-dialog-slide-title"
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle id="alert-dialog-slide-title">Delete ID {selectedRow}?</DialogTitle>
-                {/*<DialogContent>*/}
-                {/*    <DialogContentText id="alert-dialog-slide-description">*/}
-                {/*        Are you sure?*/}
-                {/*    </DialogContentText>*/}
-                {/*</DialogContent>*/}
                 <DialogActions>
                     <Button onClick={handleCloseDelete} color="primary"
                             variant="contained">
