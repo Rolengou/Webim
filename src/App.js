@@ -1,7 +1,6 @@
 import {SignIn} from "./components/Form";
-import {Users} from "./components/Users";
 import {HashRouter, Route, Switch} from "react-router-dom";
-import {DataTable} from "./components/table";
+import {Main} from "./components/Main";
 
 function App() {
     return (
@@ -9,12 +8,11 @@ function App() {
             <HashRouter>
                 <Switch>
                     <Route exact path='/' component={SignIn}/>
-                    <Route path='/users' component={DataTable}/>
+                    <Route path='/users' component={Main}/>
                 </Switch>
             </HashRouter>
         </div>
     );
 }
-
 
 export default App;
